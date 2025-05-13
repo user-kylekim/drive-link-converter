@@ -3,27 +3,77 @@
 <head>
   <meta charset="UTF-8">
   <title>Google Drive 링크 → 이미지 링크 변환기</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #333;
+    }
+    input, textarea {
+      width: 80%;
+      max-width: 600px;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      background-color: #007bff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #imgPreview img {
+      margin-top: 20px;
+      max-width: 80%;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
 <body>
   <h1>Google Drive 링크 → 이미지 링크 변환기</h1>
-  <input type="text" id="driveLink" placeholder="Google Drive 링크 입력" style="width:80%;"><br><br>
-  <button onclick="convertLink()">변환</button><br><br>
-  <textarea id="resultLink" style="width:80%; height:60px;" readonly></textarea><br><br>
+  <input type="text" id="driveLink" placeholder="Google Drive 링크 입력 (엔터 입력 시 자동 변환)">
+  <button onclick="convertLink()">변환</button>
+  <textarea id="resultLink" rows="3" readonly></textarea>
   <div id="imgPreview"></div>
 
   <script>
     function convertLink() {
-      var link = document.getElementById('driveLink').value;
+      var link = document.getElementById('driveLink').value.trim();
       var fileIdMatch = link.match(/[-\w]{25,}/);
       if (fileIdMatch) {
         var imgLink = 'https://drive.google.com/uc?export=view&id=' + fileIdMatch[0];
         document.getElementById('resultLink').value = imgLink;
-        document.getElementById('imgPreview').innerHTML = '<img src="' + imgLink + '" style="max-width:100%;">';
+        document.getElementById('imgPreview').innerHTML = '<img src="' + imgLink + '">';
       } else {
         document.getElementById('resultLink').value = '잘못된 링크입니다.';
         document.getElementById('imgPreview').innerHTML = '';
       }
     }
+
+    document.getElementById('driveLink').addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // 엔터 누르면 폼 전송 방지
+        convertLink();
+      }
+    });
   </script>
 </body>
 </html>
