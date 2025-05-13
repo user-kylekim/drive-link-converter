@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Google Drive 링크 → 이미지 링크 변환기</title>
+</head>
+<body>
+  <h1>Google Drive 링크 → 이미지 링크 변환기</h1>
+  <input type="text" id="driveLink" placeholder="Google Drive 링크 입력" style="width:80%;"><br><br>
+  <button onclick="convertLink()">변환</button><br><br>
+  <textarea id="resultLink" style="width:80%; height:60px;" readonly></textarea><br><br>
+  <div id="imgPreview"></div>
+
+  <script>
+    function convertLink() {
+      var link = document.getElementById('driveLink').value;
+      var fileIdMatch = link.match(/[-\w]{25,}/);
+      if (fileIdMatch) {
+        var imgLink = 'https://drive.google.com/uc?export=view&id=' + fileIdMatch[0];
+        document.getElementById('resultLink').value = imgLink;
+        document.getElementById('imgPreview').innerHTML = '<img src="' + imgLink + '" style="max-width:100%;">';
+      } else {
+        document.getElementById('resultLink').value = '잘못된 링크입니다.';
+        document.getElementById('imgPreview').innerHTML = '';
+      }
+    }
+  </script>
+</body>
+</html>
